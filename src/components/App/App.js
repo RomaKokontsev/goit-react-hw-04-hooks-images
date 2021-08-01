@@ -19,16 +19,13 @@ export default function App() {
   const [openModal, setIsOpenModal] = useState(false);
 
   useEffect(() => {
-    if (searchQuery !== "" || page !== 1) {
-      // toggleLoading();
-      fetchImages(searchQuery, page)
-        .then(({ hits }) => setVisibleImages([...visibleImages, ...hits]))
-        .then(handleScroll)
-        .catch((error) => console.log(error.message));
-      // .finally(toggleLoading());
-    }
-    // toggleLoading();
+    // код, который будет вызываться только при изменении searchQuery или page
+    getData();
   }, [searchQuery, page]);
+  useEffect(() => {
+    // код, который будет вызываться при каждом рендере компонента
+    handleScroll();
+  });
 
   const toggleModal = () => {
     setIsOpenModal(!openModal);
@@ -42,6 +39,15 @@ export default function App() {
     setSearchQuery(query);
     setPage(1);
     setVisibleImages([]);
+  };
+
+  const getData = () => {
+    if (searchQuery !== "" || page !== 1) {
+      fetchImages(searchQuery, page)
+        .then(({ hits }) => setVisibleImages([...visibleImages, ...hits]))
+        .then(handleScroll)
+        .catch((error) => console.log(error.message));
+    }
   };
 
   const handleNextPage = () => {
@@ -151,19 +157,19 @@ export default function App() {
 //     this.setState({ modalContent: element.largeImageURL });
 //   };
 
-//   getData = () => {
-//     const { searchQuery, page } = this.state;
-//     this.toggleLoading();
-//     fetchImages(searchQuery, page)
-//       .then(({ hits }) => {
-//         this.setState(({ visibleImages }) => {
-//           return { visibleImages: [...visibleImages, ...hits] };
-//         });
-//       })
-//       // .then(this.handleScroll)
-//       .catch((error) => console.log(error.message))
-//       .finally(this.toggleLoading);
-//   };
+// getData = () => {
+//   const { searchQuery, page } = this.state;
+//   this.toggleLoading();
+//   fetchImages(searchQuery, page)
+//     .then(({ hits }) => {
+//       this.setState(({ visibleImages }) => {
+//         return { visibleImages: [...visibleImages, ...hits] };
+//       });
+//     })
+//     // .then(this.handleScroll)
+//     .catch((error) => console.log(error.message))
+//     .finally(this.toggleLoading);
+// };
 
 //   render() {
 //     const { visibleImages, openModal, modalContent, isLoading, page } =
